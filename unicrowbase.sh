@@ -47,10 +47,14 @@ then
     read -p "Which version are you using django? (default latest version): " django_version
     django_version=${django_version:-latest}
 
+    # Remote Address
+    read -p "Remote address?(Optional, example: https://github.com/unicrow/unicrowbase.git): " remote_address
+
     echo -e "\n------------------\n"
     read -p """Project Name = $project_name
 Python Version = $python_version
 Django Version = $django_version
+Remote Address = $remote_address
 Do yu confirm? ([Y]/N): """ confirm
     case $confirm in
         [Nn]* ) echo -e "\n------------------\n"; echo -e "Start from beginning!\n";;
@@ -98,12 +102,22 @@ Do yu confirm? ([Y]/N): """ confirm
 
     # Start Project #
     echo -e "\n---  Start Project   ---\n"
-    django-admin startproject source
+    django-admin startproject source; cd source;
     ##################
 
 
+    # Configure Remote Address #
+    if [ $remote_address ]
+    then
+      echo -e "\n---  Configure Remote Address   ---\n"
+      git init
+      git remote add origin $remote_address
+    fi
+    ############################
+
+
     # Configure Project #
-    cd source/source; mkdir apps templates templatetags settings
+    cd source; mkdir apps templates templatetags settings
 
     # Apps
     cd apps; $base_dir/$project_name/web/source/manage.py startapp core; mv ../urls.py core/
@@ -189,6 +203,8 @@ Do yu confirm? ([Y]/N): """ confirm
   echo -e "\n---   Setup Begins   ---\n"
 
   { # try
+
+    # First Step #
     echo -e "\n---  First Step   ---\n"
     {
       git clone --branch=$sassbase_version https://github.com/unicrow/sassbase.git $project_name
@@ -196,26 +212,34 @@ Do yu confirm? ([Y]/N): """ confirm
       git clone https://github.com/unicrow/sassbase.git $sassbase_version
       echo -e "\nVersion not found! Pull default version.\n"
     }
+    ##############
 
+
+    # Configure Remote Address #
     cd $project_name; rm -rf .git/
-
     if [ $remote_address ]
     then
       echo -e "\n---  Configure Remote Address   ---\n"
       git init
       git remote add origin $remote_address
     fi
+    ############################
+
 
     # Install Npm Packages #
     echo -e "\n---  Install Npm Packages   ---\n"
     npm install
     ########################
+
+
     echo -e "\n---     End Setup    ---\n"
 
-    echo -e "\n---     Start Grunt    ---\n"
+
     # Start Grunt #
+    echo -e "\n---     Start Grunt    ---\n"
     grunt
     ###############
+
   } || { # catch
     cd $base_dir
     rm -rf $project_name
