@@ -1,4 +1,11 @@
 
+echo -e -n """\e[96m
+||    ||  ||    ||  ||  ||||||||  ||||||    ||||||   ||    ||    ||
+||    ||  ||||  ||  ||  ||        ||   ||  ||    ||   ||  ||||  ||
+||    ||  ||  ||||  ||  ||        |||||    ||    ||    ||||  ||||
+||||||||  ||    ||  ||  ||||||||  ||   ||   ||||||      ||    ||
+\e[97m"""
+
 
 read -p """
 Welcome Unicrowbase :)
@@ -48,7 +55,7 @@ then
     django_version=${django_version:-latest}
 
     # Remote Address
-    read -p "Remote address?(Optional, example: https://github.com/unicrow/unicrowbase.git): " remote_address
+    read -p "Remote address? (Optional, example: https://github.com/unicrow/unicrowbase.git): " remote_address
 
     echo -e "\n------------------\n"
     read -p """Project Name = $project_name
@@ -110,8 +117,7 @@ Do yu confirm? ([Y]/N): """ confirm
     if [ $remote_address ]
     then
       echo -e "\n---  Configure Remote Address   ---\n"
-      git init
-      git remote add origin $remote_address
+      git init; git remote add origin $remote_address
     fi
     ############################
 
@@ -176,7 +182,7 @@ then
     done
 
     # Remote Address
-    read -p "Remote address?(Optional, example: https://github.com/unicrow/unicrowbase.git): " remote_address
+    read -p "Remote address? (Optional, example: https://github.com/unicrow/unicrowbase.git): " remote_address
 
     echo -e "\n------------------\n"
     read -p """Project Name = $project_name
@@ -220,8 +226,7 @@ Do yu confirm? ([Y]/N): """ confirm
     if [ $remote_address ]
     then
       echo -e "\n---  Configure Remote Address   ---\n"
-      git init
-      git remote add origin $remote_address
+      git init; git remote add origin $remote_address
     fi
     ############################
 
