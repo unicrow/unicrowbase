@@ -11,14 +11,16 @@ echo -e -n """\033[0;96m
 read -p """
 Welcome Unicrowbase :)
 
-Django: 1
-Sass  : 2
+Start Django Project: 1
+Start Sass Project : 2
+Install Sass Requirements: 3
 Exit  : 0
 
 Which project are started? [Enter]: """ state
 case $state in
-    [1]* ) echo -e "\n---   Django   ---\n";;
-    [2]* ) echo -e "\n---    Sass    ---\n";;
+    [1]* ) echo -e "\n---   Django Project  ---\n";;
+    [2]* ) echo -e "\n---    Sass Project   ---\n";;
+    [3]* ) echo -e "\n--- Sass Requirements ---\n";;
     [0]* ) exit;;
     * ) exit;;
 esac
@@ -252,6 +254,69 @@ Do yu confirm? ([Y]/N): """ confirm
     echo -e "\n------------------\n"; echo -e "An error occurred. Installation aborted!\n";
   }
 
-else
-  exit
+elif [ $state -eq 3 ]
+then
+  read -p """Packages to be installed:
+1) Brew (For install npm)
+2) Npm
+3) Grunt
+
+Which project are started? ( [Y]/N ): """ state
+  case $state in
+      [Nn]* ) echo -e "\n---   Installation aborted!   ---\n"; exit;;
+      * ) echo -e "\n---   Start Installation   ---\n";;
+  esac
+
+  OS=`uname`
+  echo $OS
+  if [ $OS == 'Linux' ]
+  then
+
+    echo -e "\n---     Brew    ---\n"
+    {
+      brew
+    } || {
+      ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+    }
+    echo -e "\n--------------------\n"
+
+  elif [ $OS == 'Darwin' ]
+  then
+
+    echo -e "\n---     Brew    ---\n"
+    {
+      brew
+    } || {
+      /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    }
+    echo -e "\n--------------------\n"
+
+  fi
+
+  echo -e "\n---     Npm     ---\n"
+  {
+    npm
+  } || {
+    brew install node
+  }
+  echo -e "\n--------------------\n"
+
+  echo -e "\n---    Bower     ---\n"
+  {
+    bower
+  } || {
+    npm install -g bower
+  }
+  echo -e "\n--------------------\n"
+
+  echo -e "\n---    Grunt     ---\n"
+  {
+    grunt
+  } || {
+    npm install -g grunt-cli
+  }
+  echo -e "\n--------------------\n"
+
+  rm -rf npm-debug.log
+
 fi
