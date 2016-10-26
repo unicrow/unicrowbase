@@ -118,9 +118,10 @@ Do yu confirm? ([Y]/N): """ confirm
 
 
     # Configure Remote Address #
+    git init
     if [ $remote_address ]; then
       echo -e "\n---  Configure Remote Address   ---\n"
-      git init; git remote add origin $remote_address
+      git remote add origin $remote_address
     fi
     ############################
 
@@ -165,13 +166,22 @@ elif [ $start_state -eq 2 ]; then
 
   echo -e "\n---   Control Packages   ---\n"
   package=True
+  package_ruby=True
   package_brew=True
   package_npm=True
   package_bower=True
   package_grunt=True
 
   {
-    brew --version >> unicrowbase.log && echo -en "\033[0;32mBrew \u2714 (`brew --version`)\033[0;97m\n"
+    ruby --version >/dev/null 2>&1 && echo -en "\033[0;32mRuby \u2714 (`ruby --version`)\033[0;97m\n"
+  } || {
+    package=False
+    package_ruby=False
+    echo -en "\033[0;31mRuby \u2718 \033[0;97m\n"
+  }
+
+  {
+    brew --version >/dev/null 2>&1 && echo -en "\033[0;32mBrew \u2714 (`brew --version`)\033[0;97m\n"
   } || {
     package=False
     package_brew=False
@@ -179,7 +189,7 @@ elif [ $start_state -eq 2 ]; then
   }
 
   {
-    npm --version >> unicrowbase.log && echo -en "\033[0;32mNpm \u2714 (`npm --version`)\033[0;97m\n"
+    npm --version >/dev/null 2>&1 && echo -en "\033[0;32mNpm \u2714 (`npm --version`)\033[0;97m\n"
   } || {
     package=False
     package_npm=False
@@ -187,7 +197,7 @@ elif [ $start_state -eq 2 ]; then
   }
 
   {
-    bower --version >> unicrowbase.log && echo -en "\033[0;32mBower \u2714 (`bower --version`)\033[0;97m\n"
+    bower --version >/dev/null 2>&1 && echo -en "\033[0;32mBower \u2714 (`bower --version`)\033[0;97m\n"
   } || {
     package=False
     package_bower=False
@@ -195,7 +205,7 @@ elif [ $start_state -eq 2 ]; then
   }
 
   {
-    grunt --version >> unicrowbase.log && echo -en "\033[0;32mGrunt \u2714 (`grunt --version`)\033[0;97m\n"
+    grunt --version >/dev/null 2>&1 && echo -en "\033[0;32mGrunt \u2714 (`grunt --version`)\033[0;97m\n"
   } || {
     package=False
     package_grunt=False
@@ -211,6 +221,20 @@ elif [ $start_state -eq 2 ]; then
         [Nn]* ) echo -e "\nInstallation aborted!\n"; exit;;
         * ) echo "";;
     esac
+
+    # Ruby #
+    if [ $package_ruby == False ]; then
+      echo -e "\n---     Ruby     ---\n"
+      wget "https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz"
+      tar -xvf ruby-2.3.1.tar.gz >/dev/null 2>&1; cd ruby-2.3.1
+      ./configure
+      make
+      sudo make install
+      echo -e "\n--------------------\n"
+      rm -rf ruby-2.3.1
+      rm -rf ruby-2.3.1.tar.gz
+    fi
+    ########
 
     # Brew #
     if [ $package_brew == False ]; then
@@ -251,7 +275,6 @@ elif [ $start_state -eq 2 ]; then
   fi
 
   rm -rf npm-debug.log
-  rm -rf unicrowbase.log
 
   while true; do
     echo -e "\n---    First Step   ---\n"
@@ -316,10 +339,11 @@ Do yu confirm? ([Y]/N): """ confirm
 
     # Configure Remote Address #
     cd $project_name; rm -rf .git/
+    git init
     if [ $remote_address ]
     then
       echo -e "\n---  Configure Remote Address   ---\n"
-      git init; git remote add origin $remote_address
+      git remote add origin $remote_address
     fi
     ############################
 
