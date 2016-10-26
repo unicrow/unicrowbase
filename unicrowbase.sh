@@ -72,7 +72,7 @@ Do yu confirm? ([Y]/N): """ confirm
     esac
   done
 
-  if [ -d "$project_name" ]
+  if [ -d $project_name ]
   then
     while true; do
       read -p "The project already exist! Did you overwrite? ( [N]/Y ): " remove_project
@@ -235,8 +235,19 @@ Do yu confirm? ([Y]/N): """ confirm
 
 
     # Install Npm Packages #
-    echo -e "\n---  Install Npm Packages   ---\n"
-    npm install
+    if [ -f package.json ]
+    then
+      echo -e "\n---  Install Npm Packages   ---\n"
+      npm install
+    fi
+    ########################
+
+    # Bower Packages #
+    if [ -f bower.json ]
+    then
+      echo -e "\n---  Install Bower Packages   ---\n"
+      bower install
+    fi
     ########################
 
 
@@ -261,7 +272,7 @@ then
 2) Npm
 3) Grunt
 
-Which project are started? ( [Y]/N ): """ state
+Continue? ( [Y]/N ): """ state
   case $state in
       [Nn]* ) echo -e "\n---   Installation aborted!   ---\n"; exit;;
       * ) echo -e "\n---   Start Installation   ---\n";;
@@ -269,12 +280,14 @@ Which project are started? ( [Y]/N ): """ state
 
   OS=`uname`
   echo $OS
+
   if [ $OS == 'Linux' ]
   then
 
     echo -e "\n---     Brew    ---\n"
     {
-      brew
+      brew --version >> unicrowbase.log
+      echo "Brew already installed. (`brew --version`)"
     } || {
       ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
     }
@@ -285,7 +298,8 @@ Which project are started? ( [Y]/N ): """ state
 
     echo -e "\n---     Brew    ---\n"
     {
-      brew
+      brew --version >> unicrowbase.log
+      echo "Brew already installed. (`brew --version`)"
     } || {
       /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     }
@@ -295,7 +309,8 @@ Which project are started? ( [Y]/N ): """ state
 
   echo -e "\n---     Npm     ---\n"
   {
-    npm
+    npm --version >> unicrowbase.log
+    echo "Npm already installed. (`npm --version`)"
   } || {
     brew install node
   }
@@ -303,20 +318,23 @@ Which project are started? ( [Y]/N ): """ state
 
   echo -e "\n---    Bower     ---\n"
   {
-    bower
+    bower --version >> unicrowbase.log
+    echo "Bower already installed. (`bower --version`)"
   } || {
-    npm install -g bower
+    sudo npm install -g bower
   }
   echo -e "\n--------------------\n"
 
   echo -e "\n---    Grunt     ---\n"
   {
-    grunt
+    grunt --version >> unicrowbase.log
+    echo "Grunt already installed. (`grunt --version`)"
   } || {
-    npm install -g grunt-cli
+    sudo npm install -g grunt-cli
   }
   echo -e "\n--------------------\n"
 
   rm -rf npm-debug.log
+  rm -rf unicrowbase.log
 
 fi
