@@ -171,8 +171,7 @@ elif [ $start_state -eq 2 ]; then
   package_grunt=True
 
   {
-    brew --version >> unicrowbase.log
-    echo -en "\033[0;32mBrew \u2714 (`brew --version`)\033[0;97m\n"
+    brew --version >> unicrowbase.log && echo -en "\033[0;32mBrew \u2714 (`brew --version`)\033[0;97m\n"
   } || {
     package=False
     package_brew=False
@@ -180,34 +179,27 @@ elif [ $start_state -eq 2 ]; then
   }
 
   {
-    npm --version >> unicrowbase.log
-    echo -e -n "\033[0;32mNpm \u2714 (`npm --version`)\033[0;97m\n"
+    npm --version >> unicrowbase.log && echo -en "\033[0;32mNpm \u2714 (`npm --version`)\033[0;97m\n"
   } || {
     package=False
     package_npm=False
-    echo -e -n "\033[0;31mNpm \u2718 \033[0;97m\n"
+    echo -en "\033[0;31mNpm \u2718 \033[0;97m\n"
   }
 
   {
-    bower --version >> unicrowbase.log
-    echo -e -n "\033[0;32mBower \u2714 (`bower --version`)\033[0;97m\n"
+    bower --version >> unicrowbase.log && echo -en "\033[0;32mBower \u2714 (`bower --version`)\033[0;97m\n"
   } || {
     package=False
     package_bower=False
-    echo -e -n "\033[0;31mBower \u2718 \033[0;97m\n"
+    echo -en "\033[0;31mBower \u2718 \033[0;97m\n"
   }
 
   {
-    grunt --version >> unicrowbase.log
-    echo -e -n "\033[0;32mGrunt \u2714 (`grunt --version`)\033[0;97m\n"
+    grunt --version >> unicrowbase.log && echo -en "\033[0;32mGrunt \u2714 (`grunt --version`)\033[0;97m\n"
   } || {
     package=False
     package_grunt=False
-    echo -e -n "\033[0;31mGrunt \u2718 \033[0;97m\n"
-
-    echo -e "\n---    Grunt     ---\n"
-    sudo npm install -g grunt-cli
-    echo -e "\n--------------------\n"
+    echo -en "\033[0;31mGrunt \u2718 \033[0;97m\n"
   }
 
   echo -e "\n----------------------------\n"
