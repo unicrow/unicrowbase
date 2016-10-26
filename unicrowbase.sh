@@ -241,6 +241,7 @@ elif [ $start_state -eq 2 ]; then
       echo -e "\n---     Brew    ---\n"
       if [ $OS == 'Linux' ]; then
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+        PATH="$HOME/.linuxbrew/bin:$PATH"
       elif [ $OS == 'Darwin' ]; then
         /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
       fi
@@ -259,7 +260,7 @@ elif [ $start_state -eq 2 ]; then
     # Bower #
     if [ $package_bower == False ]; then
       echo -e "\n---    Bower     ---\n"
-      sudo npm install -g bower
+      npm install -g bower
       echo -e "\n--------------------\n"
     fi
     #######
@@ -267,7 +268,7 @@ elif [ $start_state -eq 2 ]; then
     # Grunt #
     if [ $package_grunt == False ]; then
       echo -e "\n---    Grunt     ---\n"
-      sudo npm install -g grunt-cli
+      npm install -g grunt-cli
       echo -e "\n--------------------\n"
     fi
     #########
