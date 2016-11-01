@@ -163,219 +163,227 @@ elif [ $start_state -eq 2 ]; then
   ###    Sass    ###
 
   # Control Package #
-
-  echo -e "\n---   Control Packages   ---\n"
-  package=True
-  package_ruby=True
-  package_brew=True
-  package_npm=True
-  package_bower=True
-  package_grunt=True
-
-  {
-    ruby --version >/dev/null 2>&1 && echo -en "\033[0;32mRuby \u2714 (`ruby --version`)\033[0;97m\n"
-  } || {
-    package=False
-    package_ruby=False
-    echo -en "\033[0;31mRuby \u2718 \033[0;97m\n"
-  }
-
-  {
-    brew --version >/dev/null 2>&1 && echo -en "\033[0;32mBrew \u2714 (`brew --version`)\033[0;97m\n"
-  } || {
-    package=False
-    package_brew=False
-    echo -en "\033[0;31mBrew \u2718 \033[0;97m\n"
-  }
-
-  {
-    npm --version >/dev/null 2>&1 && echo -en "\033[0;32mNpm \u2714 (`npm --version`)\033[0;97m\n"
-  } || {
-    package=False
-    package_npm=False
-    echo -en "\033[0;31mNpm \u2718 \033[0;97m\n"
-  }
-
-  {
-    bower --version >/dev/null 2>&1 && echo -en "\033[0;32mBower \u2714 (`bower --version`)\033[0;97m\n"
-  } || {
-    package=False
-    package_bower=False
-    echo -en "\033[0;31mBower \u2718 \033[0;97m\n"
-  }
-
-  {
-    grunt --version >/dev/null 2>&1 && echo -en "\033[0;32mGrunt \u2714 (`grunt --version`)\033[0;97m\n"
-  } || {
-    package=False
-    package_grunt=False
-    echo -en "\033[0;31mGrunt \u2718 \033[0;97m\n"
-  }
-
-  echo -e "\n----------------------------\n"
-
-  if [ $package == False ]; then
-
-    read -p "Is missing packages are installed?? ( [Y]/N ): " package_state
-    case $package_state in
-        [Nn]* ) echo -e "\nInstallation aborted!\n"; exit;;
-        * ) echo "";;
-    esac
-
-    # Ruby #
-    if [ $package_ruby == False ]; then
-      echo -e "\n---     Ruby     ---\n"
-      wget "https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz"
-      tar -xvf ruby-2.3.1.tar.gz >/dev/null 2>&1; cd ruby-2.3.1
-      ./configure
-      make
-      sudo make install
-      echo -e "\n--------------------\n"
-      rm -rf ruby-2.3.1
-      rm -rf ruby-2.3.1.tar.gz
-    fi
-    ########
-
-    # Brew #
-    if [ $package_brew == False ]; then
-      echo -e "\n---     Brew    ---\n"
-      if [ $OS == 'Linux' ]; then
-        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
-        PATH="$HOME/.linuxbrew/bin:$PATH"
-      elif [ $OS == 'Darwin' ]; then
-        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-      fi
-      echo -e "\n--------------------\n"
-    fi
-    ########
-
-    # Npm #
-    if [ $package_npm == False ]; then
-      echo -e "\n---     Npm     ---\n"
-      brew install node
-      echo -e "\n--------------------\n"
-    fi
-    #######
-
-    # Bower #
-    if [ $package_bower == False ]; then
-      echo -e "\n---    Bower     ---\n"
-      npm install -g bower
-      echo -e "\n--------------------\n"
-    fi
-    #######
-
-    # Grunt #
-    if [ $package_grunt == False ]; then
-      echo -e "\n---    Grunt     ---\n"
-      npm install -g grunt-cli
-      echo -e "\n--------------------\n"
-    fi
-    #########
-
-  fi
-
-  rm -rf npm-debug.log
-
   while true; do
-    echo -e "\n---    First Step   ---\n"
-    # Project Name
-    while true; do
-      read -p "What is the name of project? (project_name, home/user/project_name): " project_name
-      if [ $project_name ]; then
-        break;
-      else
-        echo "Please enter a project name!"
-      fi
-    done
+    echo -e "\n---   Control Packages   ---\n"
 
-    # Sassbase Version
-    while true; do
-      read -p "Which version are you using sassbase? ( [include]/bower/default ): " sassbase_version
-      case $sassbase_version in
-          [default]* ) sassbase_version=${sassbase_version:-master}; break;;
-          [bower]* ) sassbase_version=${sassbase_version:-bower}; break;;
-          * ) sassbase_version=${sassbase_version:-include}; break;;
+    package=True
+    package_ruby=True
+    package_brew=True
+    package_npm=True
+    package_bower=True
+    package_grunt=True
+
+    {
+      ruby --version >/dev/null 2>&1 && echo -en "* \033[0;32mRuby (`ruby --version`)\033[0;97m\n"
+    } || {
+      package=False
+      package_ruby=False
+      echo -en "* \033[0;31mRuby \033[0;97m\n"
+    }
+
+    {
+      brew --version >/dev/null 2>&1 && echo -en "* \033[0;32mBrew (`brew --version`)\033[0;97m\n"
+    } || {
+      package=False
+      package_brew=False
+      echo -en "* \033[0;31mBrew \033[0;97m\n"
+    }
+
+    {
+      npm --version >/dev/null 2>&1 && echo -en "* \033[0;32mNpm (`npm --version`)\033[0;97m\n"
+    } || {
+      package=False
+      package_npm=False
+      echo -en "* \033[0;31mNpm \033[0;97m\n"
+    }
+
+    {
+      bower --version >/dev/null 2>&1 && echo -en "* \033[0;32mBower (`bower --version`)\033[0;97m\n"
+    } || {
+      package=False
+      package_bower=False
+      echo -en "* \033[0;31mBower \033[0;97m\n"
+    }
+
+    {
+      grunt --version >/dev/null 2>&1 && echo -en "* \033[0;32mGrunt (`grunt --version`)\033[0;97m\n"
+    } || {
+      package=False
+      package_grunt=False
+      echo -en "* \033[0;31mGrunt \033[0;97m\n"
+    }
+
+    echo -e "\n----------------------------\n"
+
+    if [ $package == False ]; then
+
+      read -p "Is missing packages are installed?? ( [Y]/N ): " package_state
+      case $package_state in
+          [Nn]* ) echo -e "\nInstallation aborted!\n"; exit;;
+          * ) echo "";;
       esac
-    done
 
-    # Remote Address
-    read -p "Remote address? (Optional, example: https://github.com/unicrow/unicrowbase.git): " remote_address
+      # Ruby #
+      if [ $package_ruby == False ]; then
+        echo -e "\n---     Ruby     ---\n"
+        wget "https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz"
+        tar -xvf ruby-2.3.1.tar.gz >/dev/null 2>&1; cd ruby-2.3.1
+        ./configure
+        make
+        sudo make install
+        echo -e "\n--------------------\n"
+        rm -rf ruby-2.3.1
+        rm -rf ruby-2.3.1.tar.gz
+      fi
+      ########
 
-    echo -e "\n-----------------------\n"
-    read -p """Project Name = $project_name
+      # Brew #
+      if [ $package_brew == False ]; then
+        echo -e "\n---     Brew    ---\n"
+        if [ $OS == 'Linux' ]; then
+          ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+          PATH="$HOME/.linuxbrew/bin:$PATH"
+        elif [ $OS == 'Darwin' ]; then
+          /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        fi
+        echo -e "\n--------------------\n"
+      fi
+      ########
+
+      # Npm #
+      if [ $package_npm == False ]; then
+        echo -e "\n---     Npm     ---\n"
+        brew install node
+        echo -e "\n--------------------\n"
+      fi
+      #######
+
+      # Bower #
+      if [ $package_bower == False ]; then
+        echo -e "\n---    Bower     ---\n"
+        npm install -g bower
+        echo -e "\n--------------------\n"
+      fi
+      #######
+
+      # Grunt #
+      if [ $package_grunt == False ]; then
+        echo -e "\n---    Grunt     ---\n"
+        npm install -g grunt-cli
+        echo -e "\n--------------------\n"
+      fi
+      #########
+
+    else
+      break;
+    fi
+
+    rm -rf npm-debug.log
+
+  done
+
+  if [ $package == True ]; then
+
+    while true; do
+      echo -e "\n---    First Step   ---\n"
+      # Project Name
+      while true; do
+        read -p "What is the name of project? (project_name, home/user/project_name): " project_name
+        if [ $project_name ]; then
+          break;
+        else
+          echo "Please enter a project name!"
+        fi
+      done
+
+      # Sassbase Version
+      while true; do
+        read -p "Which version are you using sassbase? ( [include]/bower/default ): " sassbase_version
+        case $sassbase_version in
+            [default]* ) sassbase_version=${sassbase_version:-master}; break;;
+            [bower]* ) sassbase_version=${sassbase_version:-bower}; break;;
+            * ) sassbase_version=${sassbase_version:-include}; break;;
+        esac
+      done
+
+      # Remote Address
+      read -p "Remote address? (Optional, example: https://github.com/unicrow/unicrowbase.git): " remote_address
+
+      echo -e "\n-----------------------\n"
+      read -p "Project Name = $project_name
 Sassbase Version = $sassbase_version
 Remote Adress = $remote_address
 Do yu confirm? ([Y]/N): """ confirm
-    case $confirm in
-        [Nn]* ) echo -e "\n------------------\n"; echo -e "Start from beginning!\n";;
-        * ) break;;
-    esac
-  done
-
-  if [ -d "$project_name" ]; then
-    while true; do
-      read -p "The project already exist! Did you overwrite? ( [N]/Y ): " remove_project
-      case $remove_project in
-        [Yy]* ) rm -rf $project_name; break;;
-        * ) echo -e "\n------------------\n"; echo -e "Installation aborted!\n"; exit;;
+      case $confirm in
+          [Nn]* ) echo -e "\n------------------\n"; echo -e "Start from beginning!\n";;
+          * ) break;;
       esac
     done
-  fi
 
-  echo -e "\n\n---   Setup Begins   ---\n"
+    if [ -d "$project_name" ]; then
+      while true; do
+        read -p "The project already exist! Did you overwrite? ( [N]/Y ): " remove_project
+        case $remove_project in
+          [Yy]* ) rm -rf $project_name; break;;
+          * ) echo -e "\n------------------\n"; echo -e "Installation aborted!\n"; exit;;
+        esac
+      done
+    fi
 
-  { # try
+    echo -e "\n\n---   Setup Begins   ---\n"
 
-    # First Step #
-    echo -e "\n---  Clone Code   ---\n"
-    {
-      git clone --branch=$sassbase_version https://github.com/unicrow/sassbase.git $project_name
-    } || {
-      git clone https://github.com/unicrow/sassbase.git $sassbase_version
-      echo -e "\nVersion not found! Pull default version.\n"
+    { # try
+
+      # First Step #
+      echo -e "\n---  Clone Code   ---\n"
+      {
+        git clone --branch=$sassbase_version https://github.com/unicrow/sassbase.git $project_name
+      } || {
+        git clone https://github.com/unicrow/sassbase.git $sassbase_version
+        echo -e "\nVersion not found! Pull default version.\n"
+      }
+      ##############
+
+
+      # Configure Remote Address #
+      cd $project_name; rm -rf .git/
+      git init
+      if [ $remote_address ]
+      then
+        echo -e "\n---  Configure Remote Address   ---\n"
+        git remote add origin $remote_address
+      fi
+      ############################
+
+
+      # Install Npm Packages #
+      if [ -f package.json ]; then
+        echo -e "\n---  Install Npm Packages   ---\n"
+        npm install
+      fi
+      ########################
+
+      # Bower Packages #
+      if [ -f bower.json ]; then
+        echo -e "\n---  Install Bower Packages   ---\n"
+        bower install
+      fi
+      ########################
+
+
+      echo -e "\n---     End Setup    ---\n"
+
+
+      # Start Grunt #
+      echo -e "\n---     Start Grunt    ---\n"
+      grunt
+      ###############
+
+    } || { # catch
+      cd $base_dir
+      rm -rf $project_name
+      echo -e "\n------------------\n"; echo -e "An error occurred. Installation aborted!\n";
     }
-    ##############
 
-
-    # Configure Remote Address #
-    cd $project_name; rm -rf .git/
-    git init
-    if [ $remote_address ]
-    then
-      echo -e "\n---  Configure Remote Address   ---\n"
-      git remote add origin $remote_address
-    fi
-    ############################
-
-
-    # Install Npm Packages #
-    if [ -f package.json ]; then
-      echo -e "\n---  Install Npm Packages   ---\n"
-      npm install
-    fi
-    ########################
-
-    # Bower Packages #
-    if [ -f bower.json ]; then
-      echo -e "\n---  Install Bower Packages   ---\n"
-      bower install
-    fi
-    ########################
-
-
-    echo -e "\n---     End Setup    ---\n"
-
-
-    # Start Grunt #
-    echo -e "\n---     Start Grunt    ---\n"
-    grunt
-    ###############
-
-  } || { # catch
-    cd $base_dir
-    rm -rf $project_name
-    echo -e "\n------------------\n"; echo -e "An error occurred. Installation aborted!\n";
-  }
-
+  fi
 fi
