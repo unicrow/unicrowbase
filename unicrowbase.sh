@@ -47,11 +47,11 @@ if [ $start_state -eq 1 ]; then
     done
 
     # Python Version
-    while true; do
-       read -p "Which version are you using python? ( [python3]/python2 ): " python_version
+    echo "Which version are you using python? (Type: 1 or 2)"
+    select python_version in "python3" "python2"; do
        case $python_version in
-           [python2]* ) python_version=${python_version:-python2}; break;;
-           * ) python_version=${python_version:-python3}; break;;
+           python2 ) python_version=${python_version:-python2}; break;;
+           python3 ) python_version=${python_version:-python3}; break;;
        esac
     done
 
@@ -164,7 +164,7 @@ elif [ $start_state -eq 2 ]; then
 
   # Control Package #
   while true; do
-    echo -e "\n---   Control Packages   ---\n"
+    echo -e "\n---   Packages Being Checked   ---\n"
 
     package=True
     package_ruby=True
@@ -297,12 +297,11 @@ elif [ $start_state -eq 2 ]; then
       done
 
       # Sassbase Version
-      while true; do
-        read -p "Which version are you using sassbase? ( [include]/bower/default ): " sassbase_version
+      echo "Which version are you using sassbase? ( Type: 1 or 2 ) "
+      select sassbase_version in "include" "default"; do
         case $sassbase_version in
-            [default]* ) sassbase_version=${sassbase_version:-master}; break;;
-            [bower]* ) sassbase_version=${sassbase_version:-bower}; break;;
-            * ) sassbase_version=${sassbase_version:-include}; break;;
+            default ) sassbase_version=stable-default; break;;
+            include ) sassbase_version=stable-include; break;;
         esac
       done
 
@@ -339,7 +338,7 @@ Do yu confirm? ([Y]/N): """ confirm
       {
         git clone --branch=$sassbase_version https://github.com/unicrow/sassbase.git $project_name
       } || {
-        git clone https://github.com/unicrow/sassbase.git $sassbase_version
+        git clone --branch=stable-include https://github.com/unicrow/sassbase.git $project_name
         echo -e "\nVersion not found! Pull default version.\n"
       }
       ##############
