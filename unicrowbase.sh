@@ -168,6 +168,7 @@ elif [ $start_state -eq 2 ]; then
 
     package=True
     package_ruby=True
+    package_sass=True
     package_brew=True
     package_npm=True
     package_bower=True
@@ -179,6 +180,14 @@ elif [ $start_state -eq 2 ]; then
       package=False
       package_ruby=False
       echo -en "* \033[0;31mRuby \033[0;97m\n"
+    }
+
+    {
+      sass --version >/dev/null 2>&1 && echo -en "* \033[0;32mSass (`sass --version`)\033[0;97m\n"
+    } || {
+      package=False
+      package_sass=False
+      echo -en "* \033[0;31mSass \033[0;97m\n"
     }
 
     {
@@ -234,6 +243,14 @@ elif [ $start_state -eq 2 ]; then
         echo -e "\n--------------------\n"
         rm -rf ruby-2.3.1
         rm -rf ruby-2.3.1.tar.gz
+      fi
+      ########
+
+      # Sass #
+      if [ $package_sass == False ]; then
+        echo -e "\n---     Sass    ---\n"
+        sudo gem install sass
+        echo -e "\n--------------------\n"
       fi
       ########
 
