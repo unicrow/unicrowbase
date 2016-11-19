@@ -5,7 +5,22 @@ echo -e -n """\033[0;96m
 ||    ||  ||||  ||  ||  ||        ||   ||  ||    ||   ||  ||||  ||
 ||    ||  ||  ||||  ||  ||        |||||    ||    ||    ||||  ||||
 ||||||||  ||    ||  ||  ||||||||  ||   ||   ||||||      ||    ||
-\033[0;97m"""
+\033[0;97m\n"""
+
+
+{
+  git diff stable-master > update_package.patch
+
+  if [ -s update_package.patch ] ; then
+    read -p "There are updates! Install now? ( [Y]/N ): " package_state
+    case $package_state in
+        [Nn]* ) echo -e "\nInstallation aborted!\n";;
+        * ) git pull origin master;;
+    esac
+  fi
+
+  rm -rf update_package.patch
+} || {}
 
 
 read -p """
@@ -28,6 +43,7 @@ base_dir=`pwd`
 OS=`uname`
 echo -e "\033[0;32mOS: $OS\033[0;97m"
 echo -e "\n-------------------------\n"
+
 
 if [ $start_state -eq 1 ]; then
 
@@ -226,7 +242,7 @@ elif [ $start_state -eq 2 ]; then
 
     if [ $package == False ]; then
 
-      read -p "Is missing packages are installed?? ( [Y]/N ): " package_state
+      read -p "Is missing packages are installed? ( [Y]/N ): " package_state
       case $package_state in
           [Nn]* ) echo -e "\nInstallation aborted!\n"; exit;;
           * ) echo "";;
