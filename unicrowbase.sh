@@ -15,7 +15,7 @@ echo -e -n """\033[0;96m
     read -p "There are updates! Install now? ( [Y]/N ): " package_state
     case $package_state in
         [Nn]* ) echo -e "\nInstallation aborted!\n";;
-        * ) git pull origin master;;
+        * ) git pull origin stable-master;;
     esac
   fi
 
